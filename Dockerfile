@@ -10,18 +10,18 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["AgroSolutions.AzureFunctions.Functions/AgroSolutions.AzureFunctions.Functions.csproj", "AgroSolutions.AzureFunctions.Functions/"]
-COPY ["AgroSolutions.AzureFunctions.Domain/AgroSolutions.AzureFunctions.Domain.csproj", "AgroSolutions.AzureFunctions.Domain/"]
-COPY ["AgroSolutions.AzureFunctions.Infrastructure/AgroSolutions.AzureFunctions.Infrastructure.csproj", "AgroSolutions.AzureFunctions.Infrastructure/"]
-RUN dotnet restore "./AgroSolutions.AzureFunctions.Functions/AgroSolutions.AzureFunctions.Functions.csproj"
+COPY ["AgroSolutions.AzureFunction.Functions/AgroSolutions.AzureFunction.Functions.csproj", "AgroSolutions.AzureFunction.Functions/"]
+COPY ["AgroSolutions.AzureFunction.Domain/AgroSolutions.AzureFunction.Domain.csproj", "AgroSolutions.AzureFunction.Domain/"]
+COPY ["AgroSolutions.AzureFunction.Infrastructure/AgroSolutions.AzureFunction.Infrastructure.csproj", "AgroSolutions.AzureFunction.Infrastructure/"]
+RUN dotnet restore "./AgroSolutions.AzureFunction.Functions/AgroSolutions.AzureFunction.Functions.csproj"
 COPY . .
-WORKDIR "/src/AgroSolutions.AzureFunctions.Functions"
-RUN dotnet build "./AgroSolutions.AzureFunctions.Functions.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/AgroSolutions.AzureFunction.Functions"
+RUN dotnet build "./AgroSolutions.AzureFunction.Functions.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # Esta fase é usada para publicar o projeto de serviço a ser copiado para a fase final
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./AgroSolutions.AzureFunctions.Functions.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./AgroSolutions.AzureFunction.Functions.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # Esta fase é usada na produção ou quando executada no VS no modo normal (padrão quando não está usando a configuração de Depuração)
 FROM base AS final
