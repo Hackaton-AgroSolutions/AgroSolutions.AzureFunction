@@ -1,0 +1,25 @@
+{
+    "IsEncrypted": false,
+    "Values": {
+      "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+      "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+      "InfluxDB:Url": "http://localhost:8086",
+      "InfluxDB:Username": "agrosolutions-admin",
+      "InfluxDB:Password": "agrosolutionsAdmin123$",
+      "InfluxDB:Org": "agrosolutions-org",
+      "InfluxDB:Bucket": "agrosolutions-bucket",
+      "InfluxDB:Token": "Je2LUfYXX9o10pAcYgzsG8tWeRlR5qwKjpAqlV_sf-HyD09G2-eG90yyOXWa6tNVDtwKzq_zshT6XXd4FYBi3A==",
+      "Messaging:Host": "localhost",
+      "Messaging:Port": 5672,
+      "Messaging:Exchange": "agro-solutions.exchange",
+      "Messaging:Username": "guest",
+      "Messaging:Password": "guest",
+      "Messaging:Destinations:0:Id": "RECEIVED_SENSOR_DATA",
+      "Messaging:Destinations:0:Queue": "received-sensor-data-to-influxdb",
+      "Messaging:Destinations:0:RoutingKey": "received.sensor.data",
+      "Messaging:Destinations:1:Id": "RECEIVED_SENSOR_DATA",
+      "Messaging:Destinations:1:Queue": "received-sensor-data-to-alerts",
+      "Messaging:Destinations:1:RoutingKey": "received.sensor.data",
+      "RabbitMQConnection": "amqp://guest:guest@localhost:5672/"
+    }
+}
