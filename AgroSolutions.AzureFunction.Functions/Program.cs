@@ -6,7 +6,16 @@ using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Prometheus;
 using Serilog;
+using Serilog.Sinks.Grafana.Loki;
+
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .Enrich.WithProperty("service_name", "agro-solution-azurefunction-function")
+    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] (CorrelationId={CorrelationId}) {Message:lj} {NewLine}{Exception}")
+    .WriteTo.GrafanaLoki("http://loki:3100")
+    .CreateLogger();
 
 FunctionsApplicationBuilder builder = FunctionsApplication.CreateBuilder(args);
 
@@ -17,10 +26,10 @@ builder.Services
     .ConfigureFunctionsApplicationInsights();
 
 builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection("Messaging"));
-
 builder.Services.AddSingleton<IInfluxDbService>(sp => new InfluxDbService(builder.Configuration));
 builder.Services.AddSingleton<IRabbitConnectionProvider, RabbitConnectionProvider>();
 builder.Services.AddScoped<IMessagingConnectionFactory, RabbitChannelFactory>();
+builder.Services.AddSingleton(sp => Metrics.DefaultRegistry);
 
 IHost host = builder.Build();
 

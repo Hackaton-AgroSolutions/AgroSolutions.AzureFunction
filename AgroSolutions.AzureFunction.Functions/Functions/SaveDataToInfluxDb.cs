@@ -3,7 +3,6 @@ using AgroSolutions.AzureFunction.Functions.Interfaces;
 using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Writes;
 using Microsoft.Azure.Functions.Worker;
-using RabbitMQ.Client.Events;
 using Serilog;
 using Serilog.Context;
 using System.Text.Json;
@@ -19,20 +18,19 @@ public class SaveDataToInfluxDb(IInfluxDbService influxDb)
         [RabbitMQTrigger(
             queueName: "received-sensor-data-to-influxdb",
             ConnectionStringSetting = "RabbitMQConnection"
-        )] string message,
-        BasicDeliverEventArgs args)
+        )] string message)
     {
-        using (LogContext.PushProperty("CorrelationId", args.BasicProperties.CorrelationId))
+        try
         {
-            try
+            ReceivedSensorDataEvent? receivedSensorDataEvent = JsonSerializer.Deserialize<ReceivedSensorDataEvent>(message);
+            if (receivedSensorDataEvent is null)
             {
-                ReceivedSensorDataEvent? receivedSensorDataEvent = JsonSerializer.Deserialize<ReceivedSensorDataEvent>(message);
-                if (receivedSensorDataEvent is null)
-                {
-                    Log.Error("Invalid ReceivedSensorDataEvent message: {Message}", message);
-                    return;
-                }
+                Log.Error("Invalid ReceivedSensorDataEvent message: {Message}", message);
+                return;
+            }
 
+            using (LogContext.PushProperty("CorrelationId", receivedSensorDataEvent.CorrelationId))
+            {
                 PointData pointData = PointData
                     .Measurement("agro_sensors")
                     .Tag("sensor_client_id", receivedSensorDataEvent.SensorClientId.ToString())
@@ -48,10 +46,10 @@ public class SaveDataToInfluxDb(IInfluxDbService influxDb)
 
                 _influxDb.Write(a => a.WritePoint(pointData));
             }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Error processing ReceivedSensorDataEvent with Message {Message}", message);
-            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error processing ReceivedSensorDataEvent with Message {Message}", message);
         }
     }
 }

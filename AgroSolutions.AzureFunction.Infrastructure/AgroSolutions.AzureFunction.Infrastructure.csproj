@@ -9,8 +9,16 @@
   <ItemGroup>
 	<PackageReference Include="InfluxDB.Client" Version="5.0.0" />
 	<PackageReference Include="Microsoft.Extensions.Options" Version="10.0.3" />
+    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.15.0" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.15.0" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.15.0" />
+    <PackageReference Include="prometheus-net" Version="8.2.1" />
+    <PackageReference Include="prometheus-net.AspNetCore" Version="8.2.1" />
     <PackageReference Include="RabbitMQ.Client" Version="7.2.0" />
     <PackageReference Include="Serilog" Version="4.3.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
+    <PackageReference Include="Serilog.Sinks.Grafana.Loki" Version="8.3.2" />
   </ItemGroup>
 
   <ItemGroup>

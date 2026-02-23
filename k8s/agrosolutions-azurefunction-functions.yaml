@@ -17,3 +17,9 @@ spec:
           image: marioguilhermedev/agrosolutions-azurefunction:latest
           ports:
             - containerPort: 80
+ 
+          envFrom:
+          - configMapRef:
+              name: agrosolutions-azurefunction-config
+          - secretRef:
+              name: agrosolutions-azurefunction-secret
