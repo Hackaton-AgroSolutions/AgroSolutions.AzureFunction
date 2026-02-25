@@ -8,7 +8,7 @@
     "InfluxDB:Password": "agrosolutionsAdmin123$",
     "InfluxDB:Org": "agrosolutions-org",
     "InfluxDB:Bucket": "agrosolutions-bucket",
-    "InfluxDB:Token": "Je2LUfYXX9o10pAcYgzsG8tWeRlR5qwKjpAqlV_sf-HyD09G2-eG90yyOXWa6tNVDtwKzq_zshT6XXd4FYBi3A==",
+    "InfluxDB:Token": "6FzOcGrkmBInJ0eF5iHtG0V11Sz9KbZSM-gEGeVf-0n2IkHjyGwX_S9aKkofMm6e3qdvq-kwrY8oYTkbUIkFaA==",
     "Messaging:Host": "localhost",
     "Messaging:Port": 5672,
     "Messaging:Exchange": "agro-solutions.exchange",

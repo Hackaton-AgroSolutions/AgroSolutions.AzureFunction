@@ -15,6 +15,7 @@ COPY ["AgroSolutions.AzureFunction.Domain/AgroSolutions.AzureFunction.Domain.csp
 COPY ["AgroSolutions.AzureFunction.Infrastructure/AgroSolutions.AzureFunction.Infrastructure.csproj", "AgroSolutions.AzureFunction.Infrastructure/"]
 RUN dotnet restore "./AgroSolutions.AzureFunction.Functions/AgroSolutions.AzureFunction.Functions.csproj"
 COPY . .
+RUN rm -f /src/local.settings.json
 WORKDIR "/src/AgroSolutions.AzureFunction.Functions"
 RUN dotnet build "./AgroSolutions.AzureFunction.Functions.csproj" -c $BUILD_CONFIGURATION -o /app/build
 

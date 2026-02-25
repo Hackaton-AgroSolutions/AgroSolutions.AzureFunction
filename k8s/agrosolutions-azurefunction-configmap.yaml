@@ -20,3 +20,4 @@ data:
   InfluxDB__Username: agrosolutions-admin
   InfluxDB__Org: agrosolutions-org
   InfluxDB__Bucket: agrosolutions-bucket
+  RabbitMQConnection: "amqp://guest:guest@rabbitmq:5672/"
