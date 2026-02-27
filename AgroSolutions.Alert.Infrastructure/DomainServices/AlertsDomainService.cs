@@ -39,13 +39,13 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
     // Rule number 1: If soil moisture is below 30% in the last 24 hours → "Drought Alert"
     private async Task<bool> CheckDroughtAlertAsync(ReceivedSensorDataEvent receivedSensorDataEvent)
     {
-        IEnumerable<FluxTable> tables = await _influxDb.QueryAsync($@"from(bucket: ""{_bucket}"")
-            |> range(start: -24h)
-            |> filter(fn: (r) => r._measurement == ""agro_sensors"")
-            |> filter(fn: (r) => r.field_id == ""{receivedSensorDataEvent.FieldId}"")
-            |> filter(fn: (r) => r._field == ""soil_moisture_percent"")
-            |> min()
-        ");
+        IEnumerable<FluxTable> tables = await _influxDb.QueryAsync("from(bucket: \"main-bucket\""+
+            "   |> range(start: -24h)"+
+            "   |> filter(fn: (r) => r._measurement == \"agro_sensors\")"+
+            "   |> filter(fn: (r) => r.field_id == \"{receivedSensorDataEvent.FieldId}\")"+
+            "   |> filter(fn: (r) => r._field == \"soil_moisture_percent\")"+
+            "   |> min()"
+        );
         if (float.Parse(tables.SelectMany(t => t.Records).FirstOrDefault()?.Values["_value"].ToString() ?? "0") >= 30)
             return false;
 
