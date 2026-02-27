@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: agrosolutions-alerts-functions
+  name: agrosolutions-alert-functions
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: agrosolutions-alerts-functions
+      app: agrosolutions-alert-functions
   template:
     metadata:
       labels:
-        app: agrosolutions-alerts-functions
+        app: agrosolutions-alert-functions
     spec:
       containers:
-        - name: agrosolutions-alerts-functions
+        - name: agrosolutions-alert-functions
           image: marioguilhermedev/agrosolutions-alert:latest
           ports:
             - containerPort: 80

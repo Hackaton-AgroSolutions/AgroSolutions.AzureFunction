@@ -1,12 +1,12 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: agrosolutions-alerts-functions-hpa
+  name: agrosolutions-alert-functions-hpa
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: agrosolutions-alerts-functions
+    name: agrosolutions-alert-functions
   minReplicas: 1
   maxReplicas: 5
   metrics:

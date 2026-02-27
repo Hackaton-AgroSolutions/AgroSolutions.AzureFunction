@@ -1,9 +1,9 @@
 <Solution>
   <Folder Name="/k8s/">
-    <File Path="k8s/agrosolutions-alerts-configmap.yaml" />
-    <File Path="k8s/agrosolutions-alerts-functions.yaml" />
-    <File Path="k8s/agrosolutions-alerts-hpa.yaml" />
-    <File Path="k8s/agrosolutions-alerts-secret.yaml" />
+    <File Path="k8s/agrosolutions-alert-configmap.yaml" />
+    <File Path="k8s/agrosolutions-alert-functions.yaml" />
+    <File Path="k8s/agrosolutions-alert-hpa.yaml" />
+    <File Path="k8s/agrosolutions-alert-secret.yaml" />
     <File Path="k8s/agrosolutions-alerts-service.yaml" />
     <File Path="k8s/grafana.yaml" />
     <File Path="k8s/kong &amp; konga.yaml" />
