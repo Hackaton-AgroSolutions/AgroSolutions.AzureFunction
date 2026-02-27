@@ -62,7 +62,7 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
         return true;
     }
 
-    // Rule number 2: If soil ph is above 8 and air temperature is above 40ºC for 10 hours → "Plague Risk"
+    // Rule number 2: If soil ph is above 8 and air humidity percent is above 40% for 10 hours → "Plague Risk"
     private async Task<bool> CheckPlagueRiskAsync(ReceivedSensorDataEvent receivedSensorDataEvent)
     {
         IEnumerable<FluxTable> tables = tables = await _influxDb.QueryAsync("from(bucket:\"main-bucket\")" +
@@ -71,7 +71,7 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
         $"    |> filter(fn: (r) => r.sensor_client_id == \"{receivedSensorDataEvent.SensorClientId}\")" +
         "    |> filter(fn: (r) =>" +
         "        r._field == \"soil_ph\" or" +
-        "        r._field == \"air_temperature_c\")" +
+        "        r._field == \"air_humidity_percent\")" +
         "    |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")" +
         "    |> filter(fn: (r) =>" +
         "        r.soil_ph > 8 and" +
