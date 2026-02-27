@@ -115,11 +115,11 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
         return true;
     }
 
-    // Rule number 4: If the air temperature is above 35°C in the last 6 hours and the probability of rain in the next 24 hours does not exceed 60% → "Heat wave – Potential impact on production"
+    // Rule number 4: If the air temperature is above 35°C in the last 3 days and the probability of rain in the next 24 hours does not exceed 60% → "Heat wave – Potential impact on production"
     private async Task<bool> CheckHeatWaveAsync(ReceivedSensorDataEvent receivedSensorDataEvent)
     {
         IEnumerable<FluxTable> tables = await _influxDb.QueryAsync("from(bucket: \"main-bucket\")"+
-        "    |> range(start: -6h)" +
+        "    |> range(start: -3d)" +
         "    |> filter(fn: (r) => r._measurement == \"agro_sensors\")" +
         $"    |> filter(fn: (r) => r.sensor_client_id == \"{receivedSensorDataEvent.SensorClientId}\")" +
         "    |> filter(fn: (r) => r._field == \"air_temperature_c\")");
@@ -130,8 +130,8 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
         "       |> filter(fn: (r) => r.city == \"sao_paulo\")"+
         "       |> filter(fn: (r) => r._field == \"rain_probability\")"+
         "       |> max()");
-        if (!(decimal.Parse(tables.SelectMany(t => t.Records).FirstOrDefault()?.Values["_value"].ToString() ?? "30") >= 35
-            && double.Parse(tablesWeather.SelectMany(t => t.Records).FirstOrDefault()?.Values["_value"].ToString() ?? "30") > 60))
+        if (!(decimal.Parse(tables.SelectMany(t => t.Records).FirstOrDefault()?.Values["_value"].ToString() ?? "35") >= 35
+            && double.Parse(tablesWeather.SelectMany(t => t.Records).FirstOrDefault()?.Values["_value"].ToString() ?? "61") <= 60))
             return false;
 
         Log.Warning("The Sensor with Id {SensorClientId} in the Field with Id {FieldId} detected an upcoming heat wave.", receivedSensorDataEvent.SensorClientId, receivedSensorDataEvent.FieldId);
