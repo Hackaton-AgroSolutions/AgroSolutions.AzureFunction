@@ -47,7 +47,7 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
               |> filter(fn: (r) => r._field == ""soil_moisture_percent"")
               |> min()
         ");
-        if (float.Parse(tables.SelectMany(t => t.Records).FirstOrDefault()?.Values.FirstOrDefault().Value.ToString() ?? "0") >= 30)
+        if (float.Parse(tables.SelectMany(t => t.Records).FirstOrDefault()?.Values["_value"].ToString() ?? "0") >= 30)
             return false;
 
         Log.Warning("The field with ID {FieldId} and the sensor with ID {SensorClientId} are at risk of drying out.", receivedSensorDataEvent.FieldId, receivedSensorDataEvent.SensorClientId);
@@ -112,7 +112,7 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
               |> min()
         ");
 
-        if (float.Parse(tables.SelectMany(t => t.Records).FirstOrDefault()?.Values.FirstOrDefault().Value.ToString() ?? "0") >= 70)
+        if (float.Parse(tables.SelectMany(t => t.Records).FirstOrDefault()?.Values["_value"].ToString() ?? "0") >= 70)
             return false;
 
         Log.Warning("The Sensor with Id {SensorClientId} in the Field with Id {FieldId} has low data quality.", receivedSensorDataEvent.SensorClientId, receivedSensorDataEvent.FieldId);
@@ -139,7 +139,7 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
                 |> filter(fn: (r) => r._value > 35)
         ");
         IEnumerable<FluxTable> tablesWeather = await _influxDb.QueryAsync($@"
-            import ""experimental\""
+            import ""experimental""
             from(bucket: ""{_bucket}"")
                 |> range(start: now(), stop: experimental.addDuration(d: 3d, to: now()))
                 |> filter(fn: (r) => r._measurement == ""weather_forecast"")
