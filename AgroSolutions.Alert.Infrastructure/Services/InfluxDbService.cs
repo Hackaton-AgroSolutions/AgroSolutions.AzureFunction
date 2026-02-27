@@ -9,7 +9,7 @@ namespace AgroSolutions.Alert.Infrastructure.Services;
 
 public class InfluxDbService(IConfiguration configuration) : IInfluxDbService
 {
-    private InfluxDBClient GetClient() => new(new InfluxDBClientOptions(configuration["InfluxDB:Url"])
+    private readonly InfluxDBClient _influxDBClient = new(new InfluxDBClientOptions(configuration["InfluxDB:Url"])
     {
         Bucket = configuration["InfluxDB:Bucket"],
         Org = configuration["InfluxDB:Org"],
@@ -20,16 +20,14 @@ public class InfluxDbService(IConfiguration configuration) : IInfluxDbService
 
     public async Task WritePointDataAsync(PointData pointData)
     {
-        using InfluxDBClient client = GetClient();
-        WriteApiAsync writeApiAsync = client.GetWriteApiAsync();
+        WriteApiAsync writeApiAsync = _influxDBClient.GetWriteApiAsync();
         await writeApiAsync.WritePointAsync(pointData);
     }
 
     public async Task<IEnumerable<FluxTable>> QueryAsync(string query)
     {
         Log.Information("InfluxDB with Bucket: {Bucket}", configuration["InfluxDB:Bucket"]);
-        using InfluxDBClient client = GetClient();
-        QueryApi queryApi = client.GetQueryApi();
+        QueryApi queryApi = _influxDBClient.GetQueryApi();
         return await queryApi.QueryAsync(query, configuration["InfluxDB:Org"]);
     }
 }
