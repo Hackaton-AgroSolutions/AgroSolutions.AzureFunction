@@ -10,14 +10,14 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["AgroSolutions.AzureFunction.Functions/AgroSolutions.AzureFunction.Functions.csproj", "AgroSolutions.AzureFunction.Functions/"]
-COPY ["AgroSolutions.AzureFunction.Domain/AgroSolutions.AzureFunction.Domain.csproj", "AgroSolutions.AzureFunction.Domain/"]
-COPY ["AgroSolutions.AzureFunction.Infrastructure/AgroSolutions.AzureFunction.Infrastructure.csproj", "AgroSolutions.AzureFunction.Infrastructure/"]
-RUN dotnet restore "./AgroSolutions.AzureFunction.Functions/AgroSolutions.AzureFunction.Functions.csproj"
+COPY ["AgroSolutions.Alert.Functions/AgroSolutions.Alert.Functions.csproj", "AgroSolutions.Alert.Functions/"]
+COPY ["AgroSolutions.Alert.Domain/AgroSolutions.Alert.Domain.csproj", "AgroSolutions.Alert.Domain/"]
+COPY ["AgroSolutions.Alert.Infrastructure/AgroSolutions.Alert.Infrastructure.csproj", "AgroSolutions.Alert.Infrastructure/"]
+RUN dotnet restore "./AgroSolutions.Alert.Functions/AgroSolutions.Alert.Functions.csproj"
 COPY . .
 RUN rm -f /src/local.settings.json
-WORKDIR "/src/AgroSolutions.AzureFunction.Functions"
-RUN dotnet build "./AgroSolutions.AzureFunction.Functions.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/AgroSolutions.Alert.Functions"
+RUN dotnet build "./AgroSolutions.Alert.Functions.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # Esta fase é usada para publicar o projeto de serviço a ser copiado para a fase final
 FROM build AS publish
