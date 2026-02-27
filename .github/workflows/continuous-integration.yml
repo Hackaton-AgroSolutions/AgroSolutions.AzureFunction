@@ -18,7 +18,7 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Download the dependencies (dotnet restore)
-        run: dotnet restore AgroSolutions.AzureFunction.slnx
+        run: dotnet restore AgroSolutions.Alert.slnx
 
       - name: Compile the application
-        run: dotnet build AgroSolutions.AzureFunction.slnx
+        run: dotnet build AgroSolutions.Alert.slnx
