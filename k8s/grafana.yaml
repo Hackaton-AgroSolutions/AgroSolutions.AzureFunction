@@ -51,7 +51,7 @@ kind: ConfigMap
 metadata:
   name: grafana-dashboards
 data:
-  alerts.json: |
+  alerting.json: |
     {
       "annotations": {
         "list": [
@@ -231,9 +231,169 @@ data:
       },
       "timepicker": {},
       "timezone": "browser",
-      "title": "Alerts",
+      "title": "Grafana Sensors Alerts",
       "uid": "aglqnrq",
       "version": 14,
+      "weekStart": ""
+    }
+
+  all-sensors-alerts.json: |
+    {
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": {
+              "type": "grafana",
+              "uid": "-- Grafana --"
+            },
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 0,
+      "links": [],
+      "panels": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "P951FEA4DE68E13C5"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "dark-red",
+                "mode": "fixed"
+              },
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "hideFrom": {
+                  "viz": false
+                },
+                "inspect": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "message"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 789
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Field ID"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 95
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Fired At"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 207
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 20,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "id": 1,
+          "options": {
+            "cellHeight": "sm",
+            "showHeader": true
+          },
+          "pluginVersion": "12.4.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "influxdb",
+                "uid": "P951FEA4DE68E13C5"
+              },
+              "query": "from(bucket: \"agrosolutions-bucket\")\r\n  |> range(start: -30d)\r\n  |> filter(fn: (r) => r._measurement == \"alerts\")\r\n  |> filter(fn: (r) => r._field == \"message\")\r\n  |> group(columns: [])\r\n  |> keep(columns: [\"_time\", \"field_id\", \"_value\"])\r\n  |> rename(columns: {_value: \"Message\"})\r\n  |> rename(columns: {_time: \"Fired At\"})\r\n  |> rename(columns: {field_id: \"Field ID\"})\r\n",
+              "refId": "A"
+            }
+          ],
+          "title": "All Alerts",
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {},
+                "includeByName": {},
+                "indexByName": {
+                  "Field ID": 0,
+                  "Fired At": 1,
+                  "Message": 2
+                },
+                "renameByName": {}
+              }
+            }
+          ],
+          "type": "table"
+        }
+      ],
+      "preload": false,
+      "schemaVersion": 42,
+      "tags": [],
+      "templating": {
+        "list": []
+      },
+      "time": {
+        "from": "now-6h",
+        "to": "now"
+      },
+      "timepicker": {},
+      "timezone": "browser",
+      "title": "All Sensor Alerts",
+      "uid": "ags8f4w",
+      "version": 4,
       "weekStart": ""
     }
 
@@ -335,7 +495,7 @@ data:
             "overrides": []
           },
           "gridPos": {
-            "h": 8,
+            "h": 10,
             "w": 24,
             "x": 0,
             "y": 1
@@ -367,6 +527,189 @@ data:
           ],
           "title": "Datas",
           "type": "timeseries"
+        },
+        {
+          "collapsed": false,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 11
+          },
+          "id": 6,
+          "panels": [],
+          "title": "Field ${field_id}",
+          "type": "row"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "P951FEA4DE68E13C5"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [
+                {
+                  "options": {
+                    "1": {
+                      "index": 0,
+                      "text": "Drought Alert"
+                    },
+                    "2": {
+                      "index": 1,
+                      "text": "Plague Risk"
+                    },
+                    "3": {
+                      "index": 2,
+                      "text": "Sensor with Low Data Quality"
+                    },
+                    "4": {
+                      "index": 3,
+                      "text": "Heat Wave – Potential Impact on Production"
+                    },
+                    "5": {
+                      "index": 4,
+                      "text": "High Probability of Fungal Diseases"
+                    },
+                    "6": {
+                      "index": 5,
+                      "text": "High Acidity with Potential for Reduced Nutrient Absorption"
+                    }
+                  },
+                  "type": "value"
+                }
+              ],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "light-blue",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 12
+          },
+          "id": 5,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "/.*/",
+              "values": false
+            },
+            "showPercentChange": false,
+            "textMode": "auto",
+            "wideLayout": true
+          },
+          "pluginVersion": "12.4.0",
+          "targets": [
+            {
+              "query": "from(bucket: \"agrosolutions-bucket\")\r\n  |> range(start: -30d)\r\n  |> filter(fn: (r) => \r\n    r._measurement == \"agro_sensors\" and\r\n    r._field == \"status_id\" and\r\n    r.field_id == \"${field_id}\"\r\n  )\r\n  |> last()\r\n  |> keep(columns: [\"field_id\", \"_value\"])\r\n  |> rename(columns: {_value: \"status_id\"})",
+              "refId": "A"
+            }
+          ],
+          "title": "Status",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "uid": "InfluxDB"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "hideFrom": {
+                  "viz": false
+                },
+                "inspect": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Date Time"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 203
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 12
+          },
+          "id": 7,
+          "options": {
+            "cellHeight": "sm",
+            "showHeader": true,
+            "sortBy": [
+              {
+                "desc": false,
+                "displayName": "message {field_id=\"1\", sensor_client_id=\"618f91d3-be15-4773-9eef-089262b60293\"}"
+              }
+            ]
+          },
+          "pluginVersion": "12.4.0",
+          "targets": [
+            {
+              "query": "from(bucket: \"agrosolutions-bucket\")\r\n  |> range(start: -30d)\r\n  |> filter(fn: (r) => r._measurement == \"alerts\")\r\n  |> filter(fn: (r) => r.field_id == \"${field_id}\")\r\n  |> filter(fn: (r) => r._field == \"message\")\r\n  |> group(columns: [])\r\n  |> keep(columns: [\"_time\", \"_value\"])\r\n  |> rename(columns: {_time: \"Fired At\"})\r\n  |> rename(columns: {_value: \"Message\"})",
+              "refId": "A"
+            }
+          ],
+          "title": "Alerts",
+          "type": "table"
         }
       ],
       "preload": false,
@@ -376,8 +719,8 @@ data:
         "list": [
           {
             "current": {
-              "text": "9ef46cab-dce2-4e02-a2ad-ae0880c349a4",
-              "value": "9ef46cab-dce2-4e02-a2ad-ae0880c349a4"
+              "text": "618f91d3-be15-4773-9eef-089262b60293",
+              "value": "618f91d3-be15-4773-9eef-089262b60293"
             },
             "datasource": {
               "type": "influxdb",
@@ -394,6 +737,27 @@ data:
             "regex": "",
             "regexApplyTo": "value",
             "type": "query"
+          },
+          {
+            "current": {
+              "text": "1",
+              "value": "1"
+            },
+            "datasource": {
+              "type": "influxdb",
+              "uid": "P951FEA4DE68E13C5"
+            },
+            "definition": "import \"influxdata/influxdb/schema\"\r\n\r\nschema.tagValues(\r\n  bucket: \"agrosolutions-bucket\",\r\n  tag: \"field_id\"\r\n)",
+            "label": "Field Identifier",
+            "name": "field_id",
+            "options": [],
+            "query": {
+              "query": "import \"influxdata/influxdb/schema\"\r\n\r\nschema.tagValues(\r\n  bucket: \"agrosolutions-bucket\",\r\n  tag: \"field_id\"\r\n)"
+            },
+            "refresh": 1,
+            "regex": "",
+            "regexApplyTo": "value",
+            "type": "query"
           }
         ]
       },
@@ -403,9 +767,9 @@ data:
       },
       "timepicker": {},
       "timezone": "browser",
-      "title": "Sensors",
-      "uid": "agcdsz2",
-      "version": 1,
+      "title": "Sensors2",
+      "uid": "agcdsz22",
+      "version": 9,
       "weekStart": ""
     }
 

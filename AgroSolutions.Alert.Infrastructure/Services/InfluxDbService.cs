@@ -3,6 +3,7 @@ using InfluxDB.Client;
 using InfluxDB.Client.Core.Flux.Domain;
 using InfluxDB.Client.Writes;
 using Microsoft.Extensions.Configuration;
+using Serilog;
 
 namespace AgroSolutions.Alert.Infrastructure.Services;
 
@@ -26,8 +27,9 @@ public class InfluxDbService(IConfiguration configuration) : IInfluxDbService
 
     public async Task<IEnumerable<FluxTable>> QueryAsync(string query)
     {
+        Log.Information("InfluxDB with Bucket: {Bucket}", configuration["InfluxDB:Bucket"]);
         using InfluxDBClient client = GetClient();
-        var queryApi = client.GetQueryApi();
-        return await queryApi.QueryAsync(query);
+        QueryApi queryApi = client.GetQueryApi();
+        return await queryApi.QueryAsync(query, configuration["InfluxDB:Org"]);
     }
 }

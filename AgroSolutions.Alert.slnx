@@ -1,6 +1,6 @@
 <Solution>
   <Folder Name="/k8s/">
-    <File Path="k8s/agrosolutions-azurefunction-az.yaml" />
+    <File Path="k8s/agrosolutions-alerts-functions.yaml" />
     <File Path="k8s/agrosolutions-azurefunction-configmap.yaml" />
     <File Path="k8s/agrosolutions-azurefunction-hpa.yaml" />
     <File Path="k8s/agrosolutions-azurefunction-secret.yaml" />
