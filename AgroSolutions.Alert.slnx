@@ -6,6 +6,7 @@
     <File Path="k8s/agrosolutions-alert-secret.yaml" />
     <File Path="k8s/agrosolutions-alerts-service.yaml" />
     <File Path="k8s/grafana.yaml" />
+    <File Path="k8s/influxdb.yaml" />
     <File Path="k8s/kong &amp; konga.yaml" />
     <File Path="k8s/loki.yaml" />
     <File Path="k8s/prometheus.yaml" />
